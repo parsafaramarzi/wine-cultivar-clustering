@@ -1,0 +1,4 @@
+method,eps,min_samples,clusters,noise,silhouette,ari
+k-means (k=3),,,3,0,0.28485891918989864,0.8974949815093207
+"DBSCAN (elbow eps, min_samples=2d)",3.69,26,1,8,,-0.007081180347391132
+"DBSCAN (best ARI in grid, uses labels)",2.5,10,2,32,0.3228430429558367,0.42354907037688627
