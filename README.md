@@ -55,7 +55,3 @@ tests/          unit tests
 data/           wine_cultivars.csv (UCI Wine, with the cultivar label kept for scoring)
 results/        figures and CSVs used in this README
 ```
-
-## History
-
-This repo replaces the earlier method-centred repo `Clustering_DBSCAN`. The wine-quality half of the old `DimReduction_PCA` repo is a different problem and lives in `wine-quality-pca`.
