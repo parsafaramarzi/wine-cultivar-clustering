@@ -1,4 +1,4 @@
-"""Loading and scaling the two wine datasets."""
+"""Loading and scaling the wine cultivar data."""
 from pathlib import Path
 
 import pandas as pd
@@ -15,12 +15,6 @@ def load_cultivars(path=None):
     """
     df = pd.read_csv(path or DATA / "wine_cultivars.csv")
     return df.drop(columns="cultivar"), df["cultivar"]
-
-
-def load_quality(path=None):
-    """Red vinho verde: 1143 wines, 11 chemical features, sensory quality 3-8."""
-    df = pd.read_csv(path or DATA / "wine_quality_red.csv")
-    return df.drop(columns=["quality", "Id"]), df["quality"]
 
 
 def scale(X):

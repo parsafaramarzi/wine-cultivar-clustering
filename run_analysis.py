@@ -10,8 +10,7 @@ from sklearn.cluster import DBSCAN
 from sklearn.decomposition import PCA
 
 from wine.clustering import dbscan_grid, k_distance_eps, kmeans_labels, score_labels
-from wine.data import load_cultivars, load_quality, scale
-from wine.reduction import components_for, majority_rate, separability, top_loadings
+from wine.data import load_cultivars, scale
 
 OUT = Path("results")
 OUT.mkdir(exist_ok=True)
@@ -74,38 +73,6 @@ def part1_cultivars():
     return table, grid
 
 
-def part2_quality():
-    X, y = load_quality()
-    Z = scale(X)
-    n90, ratio = components_for(Z, 0.9)
-    cum = np.cumsum(ratio)
-
-    fig, a = plt.subplots(figsize=(6, 4))
-    a.plot(range(1, len(cum) + 1), cum, marker="o")
-    a.axhline(0.9, color="grey", ls="--")
-    a.set_xlabel("principal components")
-    a.set_ylabel("cumulative explained variance")
-    a.set_title("Red wine chemistry: PCA")
-    fig.tight_layout()
-    fig.savefig(OUT / "quality_pca_variance.png", dpi=130)
-    plt.close(fig)
-
-    rows = [{"features": f"{k} PC", "cv_accuracy": separability(Z, y, k, SEED)} for k in (2, n90, Z.shape[1])]
-    rows.append({"features": "majority class", "cv_accuracy": majority_rate(y)})
-    acc = pd.DataFrame(rows)
-    acc.to_csv(OUT / "quality_separability.csv", index=False)
-    pd.DataFrame({"component": range(1, len(ratio) + 1), "explained": ratio, "cumulative": cum}) \
-        .to_csv(OUT / "quality_pca_variance.csv", index=False)
-
-    load = top_loadings(Z, list(X.columns), 0, 4) + [("|", 0)] + top_loadings(Z, list(X.columns), 1, 4)
-    return n90, cum, acc, load, y.value_counts().sort_index()
-
-
 if __name__ == "__main__":
     table, grid = part1_cultivars()
     print(table.round(3).to_string(index=False))
-    n90, cum, acc, load, counts = part2_quality()
-    print("components for 90%:", n90, "| PC1+PC2:", round(cum[1], 3))
-    print(acc.round(3).to_string(index=False))
-    print(load)
-    print(counts.to_dict())
